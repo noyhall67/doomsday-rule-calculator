@@ -19,3 +19,10 @@ The Doomsday rule lets a human compute the weekday of any date with a few mental
 ## Edge you will hit
 
 The library enforces Gregorian-only: any year before 1583 throws, because the Julian calendar was still in effect and the algorithm would return a wrong-looking answer. January and February's doomsday reference date shifts by one day in leap years, which is handled by `getDoomsdayForMonth` but is the one place callers who reach for the lower-level exports need to be aware.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
